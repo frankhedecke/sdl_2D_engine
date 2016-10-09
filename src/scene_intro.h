@@ -21,7 +21,7 @@ class Scene_Intro : public Scene {
     void process();
     void output();
     void* ring_alloc(int pos);
-    SDL_Texture* get_tile(int x, int y, uint32_t seed, uint32_t star_count);
+    SDL_Texture* get_tile(int16_t x, int16_t y, uint32_t seed, uint32_t star_count);
 
   public:
     Scene_Intro(Scene_Manager* manager);
