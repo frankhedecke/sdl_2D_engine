@@ -69,30 +69,29 @@ void Scene_Intro::process() {
 
   // update position
   if (_keys[0])
-    _y_pos += 2;
-  if (_keys[1])
     _y_pos -= 2;
+  if (_keys[1])
+    _y_pos += 2;
   if (_keys[2])
-    _x_pos += 2;
-  if (_keys[3])
     _x_pos -= 2;
+  if (_keys[3])
+    _x_pos += 2;
 
   // std::cout << _x_pos << " : " << _y_pos << std::endl;
 
   int16_t tile_x = _x_pos / 10;
-  int16_t tile_y = _y_pos / 10;
-  // TODO add 10th offset with modulo somewhere
-
-  // std::cout << "tile " << tile_x << " : " << tile_y << std::endl;
+  int16_t tile_y = _y_pos / 10;  
+  int16_t offset_x = _x_pos % 10;
+  int16_t offset_y = _y_pos % 10;
 
   // render background
-  for (int x = 0; x < 10; ++x)
-    for (int y = 0; y < 8; ++y) {
+  for (int x = -2; x < 10; ++x)
+    for (int y = -2; y < 8; ++y) {
       SDL_Texture* tile = get_tile(x + tile_x, y + tile_y);
       if (tile == nullptr)
         std::cout << "tile is NULL" << std::endl;
       else {
-        _screen->render_Texture(0.1 * x, 0.1 * y, 0.1, 0.1, tile);
+        _screen->render_Texture((0.1 * x) + ((float) (10 - offset_x) / 100), 0.1 * y + ((float) (10 - offset_y) / 100), 0.1, 0.1, tile);
         SDL_DestroyTexture(tile);
       }
     }
