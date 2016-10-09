@@ -1,5 +1,3 @@
-// TODO stop the segfaulting
-
 #include <iostream> // TODO remove
 #include <random>
 #include "scene_intro.h"
@@ -13,26 +11,29 @@ void* Scene_Intro::ring_alloc(int pos) {
 // tile is 64x64
 SDL_Texture* Scene_Intro::get_tile(int16_t x, int16_t y, uint32_t seed = 0, uint32_t star_count = 5) {
 
-//  std::cout << "create tile at " << x << "." << y << std::endl;
+  //std::cout << "create tile at " << x << "." << y << std::endl;
 
   SDL_Surface* surface = SDL_CreateRGBSurface(0, 64, 64, 32, 0, 0, 0, 0);
   if (surface == nullptr)
     std::cout << "surface is NULL" << std::endl;
 
+  if ( SDL_LockSurface(surface) != 0 )
+    return nullptr;
+
   uint32_t* pixels = (uint32_t*) surface->pixels;
-
-
+  //std::cout << pixels << std::endl;
 
   std::mt19937 generator (seed + (uint16_t) x + 97 * (uint16_t) y);
-  std::uniform_int_distribution<int> distribution(1,64);
+  std::uniform_int_distribution<int> distribution(0, 63);
 
   for (int i = 0; i < star_count; ++i) {
-    int star_x = distribution(generator);
-    int star_y = distribution(generator);
+    uint32_t star_x = distribution(generator);
+    uint32_t star_y = distribution(generator);
     //std::cout << star_x << "." << star_y << std::endl;
-    *(pixels + 64 * star_x + star_y) = 0xff0000;
+    *(pixels + 64 * star_x + star_y) = 0x00ffffff;
   }
 
+  SDL_UnlockSurface(surface);
   SDL_Texture* tex = SDL_CreateTextureFromSurface(_screen->get_renderer(), surface);
 
   if (surface != nullptr)
