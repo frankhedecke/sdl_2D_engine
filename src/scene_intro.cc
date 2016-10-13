@@ -28,12 +28,14 @@ SDL_Texture* Scene_Intro::init_cache_vector(int16_t x, int16_t y) {
     ++xii;
   }
 
-  _x_cache_pos = _x_cache_radius;
-  _y_cache_pos = _y_cache_radius;
-  _x_cache_value = x;
-  _y_cache_value = y;
+  _x_cache_pos = 0;
+  _y_cache_pos = 0;
+  _x_cache_value = x - _x_cache_radius;
+  _y_cache_value = y - _y_cache_radius;
 
-  std::cout << "cache is new" << std::endl;
+  std::cout << "INIT: cache is new for " << x << "." << y << std::endl;
+  std::cout << "INIT: POS = " << _x_cache_pos << "." << _y_cache_pos << std::endl;
+  std::cout << "INIT: VAL = " << _x_cache_value << "." << _y_cache_value << std::endl;
 
 
   for (unsigned i=0; i<_cache.size(); i++)
@@ -46,14 +48,17 @@ SDL_Texture* Scene_Intro::get_cached(int16_t x, int16_t y) {
   // TODO do some deep thinking about ring_buffers, that uses arrays
   // TODO write a cache with 2D array on the heap
 
-  int16_t x_min = _x_cache_value - _x_cache_radius;
-  int16_t x_max = _x_cache_value + _x_cache_radius + _x_cache_window;
+  int16_t x_min = _x_cache_value;
+  int16_t x_max = _x_cache_value + 2 * _x_cache_radius + _x_cache_window;
+  int16_t y_min = _y_cache_value;
+  int16_t y_max = _y_cache_value + 2 * _y_cache_radius + _y_cache_window;
 
   if ((x_min <= x) && (x <= x_max)) {
     std::cout << "inside x-cache, from " << x_min << " to " << x_max << std::endl;
-    if (_y_cache_value - _y_cache_radius <= y <= _y_cache_value + _y_cache_radius) {
+    if ((y_min <= y) && (y <= y_max)) {
+      std::cout << "inside y-cache, from " << y_min << " to " << y_max << std::endl;
       // tile inside cache
-
+//      return _cache.at(x - _x_cache_value).at(y - _y_cache_value);
       return generate_tile(x, y, 0 ,5);
     }
   }
@@ -207,8 +212,8 @@ Scene_Intro::Scene_Intro(Scene_Manager* manager) : Scene(manager) {
   _y_pos = 0;
   _x_cache_window = 12;
   _y_cache_window = 10;
-  _x_cache_radius = 2;
-  _y_cache_radius = 2;
+  _x_cache_radius = 3;
+  _y_cache_radius = 3;
   for (int i = 0; i < 5; ++i)
     _keys[i] = false;
   // ring buffer
