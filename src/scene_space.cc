@@ -1,13 +1,13 @@
 #include <iostream> // TODO remove
 #include <random>
 #include <vector>
-#include "scene_intro.h"
+#include "scene_space.h"
 
-SDL_Texture* Scene_Intro::init_cache_array(int16_t x, int16_t y) {
+SDL_Texture* Scene_Space::init_cache_array(int16_t x, int16_t y) {
   return nullptr;
 }
 
-SDL_Texture* Scene_Intro::init_cache_vector(int16_t x, int16_t y) {
+SDL_Texture* Scene_Space::init_cache_vector(int16_t x, int16_t y) {
 
   std::cout << "destroy old cache ..." << std::endl;
   for (uint16_t i=0; i < _cache.size(); ++i) {
@@ -52,7 +52,7 @@ SDL_Texture* Scene_Intro::init_cache_vector(int16_t x, int16_t y) {
   return _cache.at(_x_cache_radius).at(_y_cache_radius);
 }
 
-SDL_Texture* Scene_Intro::get_cached(int16_t x, int16_t y) {
+SDL_Texture* Scene_Space::get_cached(int16_t x, int16_t y) {
   //std::cout << "is " << x << "." << y << " cached?" << std::endl;
   // TODO do some deep thinking about ring_buffers, that uses arrays
   // TODO write a cache with 2D array on the heap
@@ -84,7 +84,7 @@ SDL_Texture* Scene_Intro::get_cached(int16_t x, int16_t y) {
 }
 
 // tile is 64x64
-SDL_Texture* Scene_Intro::generate_tile(int16_t x, int16_t y, uint32_t seed = 0, uint32_t star_count = 5) {
+SDL_Texture* Scene_Space::generate_tile(int16_t x, int16_t y, uint32_t seed = 0, uint32_t star_count = 5) {
 
   ++_gen_counter;
   std::cout << "create tile " << _gen_counter << " at " << x << "." << y << std::endl;
@@ -118,7 +118,7 @@ SDL_Texture* Scene_Intro::generate_tile(int16_t x, int16_t y, uint32_t seed = 0,
   return tex;
 }
 
-void Scene_Intro::input(SDL_Event* event) {
+void Scene_Space::input(SDL_Event* event) {
 
   if (event->type == SDL_KEYDOWN) {
     switch(event->key.keysym.sym) {
@@ -138,7 +138,7 @@ void Scene_Intro::input(SDL_Event* event) {
   }
 }
 
-void Scene_Intro::process() {
+void Scene_Space::process() {
 
   // clear screen
   _screen->clear();
@@ -175,14 +175,14 @@ void Scene_Intro::process() {
   _screen->render_Texture(0.2, 0.1, 0.6, 0.1,  _tex_name);
 }
 
-void Scene_Intro::output() {
+void Scene_Space::output() {
 
   _screen->present();
   SDL_Delay(50);
 }
 
 
-void Scene_Intro::tick(bool &quit) {
+void Scene_Space::tick(bool &quit) {
 
   SDL_Event e;
   
@@ -216,7 +216,7 @@ void Scene_Intro::tick(bool &quit) {
   output();
 }
 
-Scene_Intro::Scene_Intro(Scene_Manager* manager) : Scene(manager) {
+Scene_Space::Scene_Space(Scene_Manager* manager) : Scene(manager) {
 
   _gen_counter = 0;
   _tex_name = _screen->loadText("a game made with SDL", 48);
@@ -234,4 +234,4 @@ Scene_Intro::Scene_Intro(Scene_Manager* manager) : Scene(manager) {
   init_cache_vector(_x_pos / 10, _y_pos / 10);
 }
 
-Scene_Intro::~Scene_Intro() {}
+Scene_Space::~Scene_Space() {}

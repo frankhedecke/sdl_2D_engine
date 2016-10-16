@@ -3,7 +3,7 @@
 
 #include "cleanup.h"
 #include "scene_manager.h"
-#include "scene_intro.h"
+#include "scene_space.h"
 #include "textures.h"
 #include "vector_screen.h"
 
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
   SDL_Window *window = nullptr;
   vector_screen *screen = nullptr;
   Scene_Manager *manager = nullptr;
-  Scene_Intro *scene_intro = nullptr;
+  Scene_Space *scene_space = nullptr;
 
   if (init_main(window, screen) != 0) {
     logError("init_main");
@@ -58,8 +58,8 @@ int main(int argc, char** argv) {
 
   // TODO move vector screen creation to scene_manager
   manager = new Scene_Manager(screen);
-  scene_intro = new Scene_Intro(manager);
-  manager->load_scene(scene_intro);
+  scene_space = new Scene_Space(manager);
+  manager->load_scene(scene_space);
 
   bool quit = false;
 

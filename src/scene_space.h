@@ -5,7 +5,7 @@
 #include "scene.h"
 #include "scene_manager.h"
 
-class Scene_Intro : public Scene {
+class Scene_Space : public Scene {
 
   private:
     uint32_t _startup_ticks;
@@ -36,7 +36,7 @@ class Scene_Intro : public Scene {
     SDL_Texture* generate_tile(int16_t x, int16_t y, uint32_t seed, uint32_t star_count);
 
   public:
-    Scene_Intro(Scene_Manager* manager);
-    ~Scene_Intro();
+    Scene_Space(Scene_Manager* manager);
+    ~Scene_Space();
     void tick(bool &quit);
 };
