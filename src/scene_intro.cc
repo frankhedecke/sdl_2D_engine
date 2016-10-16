@@ -9,7 +9,15 @@ SDL_Texture* Scene_Intro::init_cache_array(int16_t x, int16_t y) {
 
 SDL_Texture* Scene_Intro::init_cache_vector(int16_t x, int16_t y) {
 
+  std::cout << "destroy old cache ..." << std::endl;
+  for (uint16_t i=0; i < _cache.size(); ++i) {
+    for (uint16_t j=0; j < _cache.at(i).size(); ++j) {
+      SDL_DestroyTexture(_cache.at(i).at(j));
+    }
+    _cache.at(i).clear();
+  }
   _cache.clear();
+  std::cout << "old cache is destroyed" << std::endl;
 
   int xii = 0;
 
@@ -45,6 +53,7 @@ SDL_Texture* Scene_Intro::init_cache_vector(int16_t x, int16_t y) {
 }
 
 SDL_Texture* Scene_Intro::get_cached(int16_t x, int16_t y) {
+  //std::cout << "is " << x << "." << y << " cached?" << std::endl;
   // TODO do some deep thinking about ring_buffers, that uses arrays
   // TODO write a cache with 2D array on the heap
 
@@ -54,12 +63,18 @@ SDL_Texture* Scene_Intro::get_cached(int16_t x, int16_t y) {
   int16_t y_max = _y_cache_value + 2 * _y_cache_radius + _y_cache_window;
 
   if ((x_min <= x) && (x <= x_max)) {
-    std::cout << "inside x-cache, from " << x_min << " to " << x_max << std::endl;
+    //std::cout << "inside x-cache, from " << x_min << " to " << x_max << std::endl;
     if ((y_min <= y) && (y <= y_max)) {
-      std::cout << "inside y-cache, from " << y_min << " to " << y_max << std::endl;
+      //std::cout << "inside y-cache, from " << y_min << " to " << y_max << std::endl;
       // tile inside cache
 //      return _cache.at(x - _x_cache_value).at(y - _y_cache_value);
-      return generate_tile(x, y, 0 ,5);
+      // TODO rework, because this will only works if cache positions are 0,0
+      if ((_x_cache_pos == 0) && (_y_cache_pos == 0)) {
+        //std::cout << "cached in " << x - _x_cache_value << "." << y - _y_cache_value << std::endl;
+        return _cache.at(x - _x_cache_value).at(y - _y_cache_value);
+      }
+      else
+        return generate_tile(x, y, 0 ,5);
     }
   }
 
@@ -148,13 +163,11 @@ void Scene_Intro::process() {
   // render background
   for (int x = -2; x < 10; ++x)
     for (int y = -2; y < 8; ++y) {
-      // TODO use cache
       SDL_Texture* tile = get_cached(x + tile_x, y + tile_y);
       if (tile == nullptr)
         std::cout << "tile is NULL" << std::endl;
       else {
         _screen->render_Texture((0.1 * x) + ((float) (10 - offset_x) / 100), 0.1 * y + ((float) (10 - offset_y) / 100), 0.1, 0.1, tile);
-        SDL_DestroyTexture(tile);
       }
     }
 
