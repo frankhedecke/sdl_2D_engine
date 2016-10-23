@@ -18,17 +18,19 @@ SDL_Texture* Scene_Space::init_cache_vector(int16_t x, int16_t y) {
   }
   _cache.clear();
   std::cout << "old cache is destroyed" << std::endl;
+  std::cout << "INIT: origin at " << x << "." << y << " ..." << std::endl;
 
   int xii = 0;
 
-  for (int16_t xi = x - _x_cache_radius; xi <= _x_cache_window + _x_cache_radius; ++xi) {
+  for (int16_t xi = x - _x_cache_radius; xi <= x + _x_cache_window + _x_cache_radius; ++xi) {
+    std::cout << "new column" << std::endl;
 
     std::vector<SDL_Texture*> column;
 
     _cache.push_back(column);
 
-    for (int16_t yi = y - _y_cache_radius; yi <= _y_cache_window + _y_cache_radius; ++yi) {
-      std::cout << "cache " << std::endl;
+    for (int16_t yi = y - _y_cache_radius; yi <= y + _y_cache_window + _y_cache_radius; ++yi) {
+      std::cout << "cache - ";
       _cache.at(xii).push_back(generate_tile(xi, yi, 0 ,5));
 
       //column.push_back(generate_tile(xi, yi, 0 ,5));
@@ -47,7 +49,8 @@ SDL_Texture* Scene_Space::init_cache_vector(int16_t x, int16_t y) {
 
 
   for (unsigned i=0; i<_cache.size(); i++)
-    std::cout << _cache.at(i).size() << std::endl;
+    std::cout << _cache.at(i).size() << " ";
+  std::cout << std::endl;
 
   return _cache.at(_x_cache_radius).at(_y_cache_radius);
 }
