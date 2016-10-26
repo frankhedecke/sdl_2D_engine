@@ -1,3 +1,4 @@
+#include "animation_sequence.h"
 #include "textures.h"
 #include "vector_screen.h"
 
@@ -82,6 +83,13 @@ void vector_screen::toggle_fullscreen() {
   }
 }
 
+Animation* vector_screen::load_Animation_Seq(const std::string &path, uint32_t count) {
+
+  Animation* animation = (Animation*) new Animation_Sequence(this, path, count);
+
+  return animation;
+}
+
 SDL_Texture* vector_screen::load_Texture(const std::string &path) {
 
   return loadTexture(path, _renderer);
@@ -92,6 +100,13 @@ SDL_Texture* vector_screen::loadText(const std::string &text, int font_size) {
   // white text is standard
   SDL_Color color = {255, 255, 255, 255};
   return renderText(text, "fonts/font.ttf", color, font_size, _renderer);
+}
+
+
+void vector_screen::render_Animation(float x, float y, float dim_x, float dim_y, Animation* animation) {
+
+  SDL_Texture* tex = animation->get_cur_texture();
+  render_Texture(x, y, dim_x, dim_y, tex);
 }
 
 void vector_screen::render_Texture(float x, float y, float dim_x, float dim_y, SDL_Texture* tex) {

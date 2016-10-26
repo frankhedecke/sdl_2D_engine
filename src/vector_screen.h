@@ -3,6 +3,8 @@
 #include <string>
 #include <SDL.h>
 
+#include "animation.h"
+
 #define uint uint16_t
 
 class vector_screen {
@@ -32,9 +34,11 @@ class vector_screen {
     ~vector_screen();
     void update_res();
     void toggle_fullscreen();
+    Animation* load_Animation_Seq(const std::string &path, uint32_t count);
     SDL_Texture* load_Texture(const std::string &path);
     SDL_Texture* loadText(const std::string &text, int font_size);
     void render_Texture(float x, float y, float dim_x, float dim_y, SDL_Texture* tex);
+    void render_Animation(float x, float y, float dim_x, float dim_y, Animation* animation);
     void present();
     void clear();
     SDL_Renderer* get_renderer();
