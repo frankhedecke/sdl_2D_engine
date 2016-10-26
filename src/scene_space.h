@@ -24,7 +24,7 @@ class Scene_Space : public Scene {
     void* _ring1[13];
     int32_t _ring1_cur;
     SDL_Texture* _tex_name;
-    // FULLSCREEN
+    SDL_Texture* _tex_ship;
     bool _keys[5];
 
     void input(SDL_Event* event);

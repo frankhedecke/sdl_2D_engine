@@ -175,7 +175,10 @@ void Scene_Space::process() {
     }
 
   // render text
-  _screen->render_Texture(0.2, 0.1, 0.6, 0.1,  _tex_name);
+  _screen->render_Texture(0.2, 0.1, 0.6, 0.1, _tex_name);
+
+  // render ship
+  _screen->render_Texture(0.45, 0.325, 0.1, 0.1, _tex_ship);
 }
 
 void Scene_Space::output() {
@@ -223,6 +226,7 @@ Scene_Space::Scene_Space(Scene_Manager* manager) : Scene(manager) {
 
   _gen_counter = 0;
   _tex_name = _screen->loadText("a game made with SDL", 48);
+  _tex_ship = _screen->load_Texture("res/ship.png");
   _startup_ticks = SDL_GetTicks();
   _x_pos = 0;
   _y_pos = 0;
