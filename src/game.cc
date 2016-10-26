@@ -1,7 +1,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "cleanup.h"
 #include "scene_manager.h"
 #include "scene_space.h"
 #include "textures.h"
@@ -67,7 +66,7 @@ int main(int argc, char** argv) {
     manager->tick(quit);
   }
 
-  cleanup(window);
+  SDL_DestroyWindow(window);
   TTF_Quit();
   SDL_Quit();
 
