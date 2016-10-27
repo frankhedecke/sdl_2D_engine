@@ -179,11 +179,12 @@ void Scene_Space::process() {
   // render text
   _screen->render_Texture(0.2, 0.1, 0.6, 0.1, _tex_name);
 
+  // render flame tails
+  _screen->render_Animation(0.5 - 0.032, 0.415, 0.02, 0.03, _ani_tails);
+  _screen->render_Animation(0.5 + 0.012, 0.415, 0.02, 0.03, _ani_tails);
+
   // render ship
   _screen->render_Texture(0.45, 0.325, 0.1, 0.1, _tex_ship);
-
-  // render flame tails
-  _screen->render_Animation(0.2, 0.2, 0.1, 0.1, _ani_tails);
 
 }
 
