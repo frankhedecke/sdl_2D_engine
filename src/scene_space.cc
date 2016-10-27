@@ -1,6 +1,8 @@
 #include <iostream> // TODO remove
 #include <random>
 #include <vector>
+
+#include "animation_sequence.h"
 #include "scene_space.h"
 
 SDL_Texture* Scene_Space::init_cache_array(int16_t x, int16_t y) {
@@ -179,6 +181,10 @@ void Scene_Space::process() {
 
   // render ship
   _screen->render_Texture(0.45, 0.325, 0.1, 0.1, _tex_ship);
+
+  // render flame tails
+  _screen->render_Animation(0.2, 0.2, 0.1, 0.1, _ani_tails);
+
 }
 
 void Scene_Space::output() {
@@ -225,6 +231,7 @@ void Scene_Space::tick(bool &quit) {
 Scene_Space::Scene_Space(Scene_Manager* manager) : Scene(manager) {
 
   _gen_counter = 0;
+  _ani_tails = _screen->load_Animation_Seq("res/flame_tails.png", 5);
   _tex_name = _screen->loadText("a game made with SDL", 48);
   _tex_ship = _screen->load_Texture("res/ship.png");
   _startup_ticks = SDL_GetTicks();

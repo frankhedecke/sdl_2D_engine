@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <SDL.h>
 
 #include "animation.h"
@@ -8,9 +9,11 @@
 class Animation_Sequence : Animation {
 
   private:
-    SDL_Texture* _texture;
+    uint32_t _cur_seq;
+    SDL_Texture* _texture; // TODO remove
     uint32_t _count;
     vector_screen* _screen;
+    std::vector<SDL_Texture*> _vec_tex;
 
   public:
     // TODO rename count
@@ -18,4 +21,4 @@ class Animation_Sequence : Animation {
     SDL_Texture* get_cur_texture();
 };
 
-// write destructor that frees the texture
+// write destructor that frees the textures

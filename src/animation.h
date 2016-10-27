@@ -5,5 +5,5 @@
 class Animation {
 
   public:
-    SDL_Texture* get_cur_texture();
+    virtual SDL_Texture* get_cur_texture() = 0;
 };

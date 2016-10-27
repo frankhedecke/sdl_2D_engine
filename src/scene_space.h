@@ -2,6 +2,7 @@
 #include <vector>
 #include <SDL.h>
 
+#include "animation.h"
 #include "scene.h"
 #include "scene_manager.h"
 
@@ -23,9 +24,11 @@ class Scene_Space : public Scene {
     int16_t _y_cache_value;
     void* _ring1[13];
     int32_t _ring1_cur;
+    bool _keys[5];
+    // textures
+    Animation* _ani_tails;
     SDL_Texture* _tex_name;
     SDL_Texture* _tex_ship;
-    bool _keys[5];
 
     void input(SDL_Event* event);
     void process();
