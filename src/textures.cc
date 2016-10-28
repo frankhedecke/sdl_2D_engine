@@ -1,19 +1,11 @@
 #include "textures.h"
 
-void logError(const std::string &msg){
-  std::cout << ">>> " << msg << " error" << std::endl;
-}
-
-void logSDLError(const std::string &msg){
-  std::cout << ">>> " << msg << " error: " << SDL_GetError() << std::endl;
-}
-
 SDL_Texture* loadTexture(const std::string &path, SDL_Renderer* ren){
 
   SDL_Texture *texture = IMG_LoadTexture(ren, path.c_str());
 
   if (texture == nullptr){
-    logSDLError("LoadTexture");
+    std::cout << "LoadTexture error" << SDL_GetError() << std::endl;
   }
   return texture;
 }
@@ -63,20 +55,20 @@ SDL_Texture* renderText(const std::string &text, const std::string &fontFile, SD
 
   TTF_Font *font = TTF_OpenFont(fontFile.c_str(), fontSize);
   if (font == nullptr){
-    logSDLError("TTF_OpenFont");
+    std::cout << "TTF_OpenFont error" << SDL_GetError() << std::endl;
     return nullptr;
   }	
 
   SDL_Surface *text_surface = text_surface=TTF_RenderUTF8_Solid(font, text.data(), color);
   if (text_surface == nullptr){
-    logSDLError("TTF_RenderUTF8_Solid");
+    std::cout << "TTF_RenderUTF8_Solid" << SDL_GetError() << std::endl;
     TTF_CloseFont(font);
     return nullptr;
   }
 
   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, text_surface);
   if (texture == nullptr){
-    logSDLError("CreateTextureFromSurface");
+    std::cout << "CreateTextureFromSurface" << SDL_GetError() << std::endl;
   }
 
   SDL_FreeSurface(text_surface);
