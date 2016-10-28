@@ -1,9 +1,10 @@
+#include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include "scene_manager.h"
 #include "scene_space.h"
-#include "textures.h"
 #include "vector_screen.h"
 
 const int SCREEN_WIDTH  = 1024;
@@ -15,12 +16,12 @@ int init_main(SDL_Window* &window, vector_screen* &screen) {
 
   // init SDL
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-    logSDLError("SDL_INIT");
+    std::cout << "SDL_Init error: " << SDL_GetError() << std::endl;
     return 1;
   }
 
   if (TTF_Init() != 0){
-    logSDLError("TTF_Init");
+    std::cout << "TTF_Init error: " << SDL_GetError() << std::endl;
     SDL_Quit();
     return 1;
   }
@@ -30,7 +31,7 @@ int init_main(SDL_Window* &window, vector_screen* &screen) {
   window = SDL_CreateWindow("SDL Pong - press ESCAPE to exit", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, win_flags);
 
   if (window == nullptr) {
-    logSDLError("SDL_CreateWindow");
+    std::cout << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
     SDL_Quit();
     return 1;
   }
@@ -50,10 +51,7 @@ int main(int argc, char** argv) {
   Scene_Manager *manager = nullptr;
   Scene_Space *scene_space = nullptr;
 
-  if (init_main(window, screen) != 0) {
-    logError("init_main");
-    return 1;
-  }
+  init_main(window, screen);
 
   // TODO move vector screen creation to scene_manager
   manager = new Scene_Manager(screen);
