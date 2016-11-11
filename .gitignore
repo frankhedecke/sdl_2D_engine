@@ -1,5 +1,9 @@
 game
+space
 TODO
 
 fonts/font.ttf
 stuff/
+
+*.o
+*.so
