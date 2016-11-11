@@ -2,7 +2,7 @@
 #include <random>
 #include <vector>
 
-#include "animation_sequence.h"
+#include <animation_sequence.h>
 #include "scene_space.h"
 
 SDL_Texture* Scene_Space::init_cache_array(int16_t x, int16_t y) {

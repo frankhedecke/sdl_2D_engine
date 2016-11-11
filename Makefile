@@ -4,7 +4,7 @@ LIBS_SDL    = -lSDL2 -lSDL2_image -lSDL2_ttf
 INCLUDE     = /usr/include/SDL2/
 PARAMETER   = -std=c++11
 
-SRC_ENGINE = src/animation.cc src/animation_sequence.cc src/textures.cc src/vector_screen.cc src/scene.cc src/scene_manager.cc
+SRC_ENGINE = src/engine/*.cc
 
 SRC_GAME_SPACE = src/scene_space.cc src/game.cc
 
@@ -12,7 +12,7 @@ main : space
 
 space : engine $(SRC_GAME_SPACE) Makefile
 	g++ $(PARAMETER) -o space $(SRC_GAME_SPACE) -Wl,-rpath=./ -L./ -lengine \
-	-I $(INCLUDE) -L/usr/lib/x86_64-linux-gnu $(LIBS_SDL)
+	-I $(INCLUDE) -I src/engine/ -L/usr/lib/x86_64-linux-gnu $(LIBS_SDL)
 
 engine : libengine.so
 

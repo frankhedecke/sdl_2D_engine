@@ -2,9 +2,9 @@
 #include <vector>
 #include <SDL.h>
 
-#include "animation.h"
-#include "scene.h"
-#include "scene_manager.h"
+#include <animation.h>
+#include <scene.h>
+#include <scene_manager.h>
 
 class Scene_Space : public Scene {
 

@@ -3,9 +3,9 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-#include "scene_manager.h"
+#include <scene_manager.h>
+#include <vector_screen.h>
 #include "scene_space.h"
-#include "vector_screen.h"
 
 const int SCREEN_WIDTH  = 1024;
 const int SCREEN_HEIGHT =  768;
