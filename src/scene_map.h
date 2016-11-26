@@ -34,6 +34,11 @@ class Link {
 class Scene_Map : public Scene {
 
   private:
+    // TODO move moue to class scene
+    bool _click_left;
+    bool _click_right;
+    int _mouse_x;
+    int _mouse_y;
     uint32_t _mod_ticks;
     uint32_t _startup_ticks;
     bool _keys[5];

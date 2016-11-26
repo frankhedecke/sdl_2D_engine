@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "scene_map.h"
+#include <SDL.h>
 
 Node::Node(uint16_t x, uint16_t y) : _pos_x(x), _pos_y(y) {
 
@@ -47,6 +48,12 @@ void Scene_Map::input(SDL_Event* event) {
       case SDLK_d:    _keys[3] = false; break;
     }
   }
+
+  // TODO move to class Scene
+  // get mouse position
+  uint32_t clicked = SDL_GetMouseState(&_mouse_x, &_mouse_y);
+  _click_left  = SDL_BUTTON(SDL_BUTTON_LEFT)  & clicked;
+  _click_right = SDL_BUTTON(SDL_BUTTON_RIGHT) & clicked;
 }
 
 void Scene_Map::process() {
@@ -58,7 +65,11 @@ void Scene_Map::process() {
   
     _mod_ticks = 0;
     std::cout << "tick " << SDL_GetTicks() << std::endl;
-
+    std::cout << "mouse at " << _mouse_x << "." << _mouse_y << std::endl;
+    if (_click_left)
+      std::cout << "mouse clicked left " << std::endl;
+    if (_click_right)
+      std::cout << "mouse clicked right " << std::endl;
 
     // update all links
     for (Link* link : _links) link->update();
@@ -100,7 +111,7 @@ void Scene_Map::output() {
   SDL_Delay(50);
 }
 
-
+// TODO move to scene
 void Scene_Map::tick(bool &quit) {
 
   SDL_Event e;
@@ -143,6 +154,11 @@ Scene_Map::Scene_Map(Scene_Manager* manager) : Scene(manager) {
   _mod_ticks = 0;
   for (int i = 0; i < 5; ++i)
     _keys[i] = false;
+  // TODO move to class Scene
+  int _mouse_x = -1;
+  int _mouse_y = -1;
+  bool _click_left = false;
+  bool _click_right = false;
 
   // create nodes
   Node* n1 = new Node(3,3);
