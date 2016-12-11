@@ -1,12 +1,13 @@
 #pragma once
 #include <forward_list>
 
+#include "scene.h"
 #include "scene_manager.h"
 #include "draw_object.h"
 
 class Scene_Manager;
 
-class Object_Scene : Scene{
+class Object_Scene : public virtual Scene {
 
   private:
     std::forward_list<Draw_Object*> _objects;
