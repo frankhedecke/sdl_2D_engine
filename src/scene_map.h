@@ -3,7 +3,7 @@
 #include <SDL.h>
 
 #include <animation.h>
-#include <scene.h>
+#include <object_scene.h>
 #include <scene_manager.h>
 
 class Node {
@@ -31,7 +31,7 @@ class Link {
     Link(Node* origin1, Node* origin2);
 };
 
-class Scene_Map : public Scene {
+class Scene_Map : public Object_Scene {
 
   private:
     // TODO move moue to class scene
@@ -55,5 +55,6 @@ class Scene_Map : public Scene {
   public:
     Scene_Map(Scene_Manager* manager);
     ~Scene_Map();
-    void tick(bool &quit);
+    void pre_tick(bool &quit);
+    void post_tick(bool &quit);
 };

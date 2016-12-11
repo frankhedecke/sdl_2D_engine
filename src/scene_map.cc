@@ -111,8 +111,7 @@ void Scene_Map::output() {
   SDL_Delay(50);
 }
 
-// TODO move to scene
-void Scene_Map::tick(bool &quit) {
+void Scene_Map::pre_tick(bool &quit) {
 
   SDL_Event e;
   
@@ -143,10 +142,16 @@ void Scene_Map::tick(bool &quit) {
   }
 
   process();
+}
+
+void Scene_Map::post_tick(bool &quit) {
+
+  // TODO move to Object_Scene
   output();
 }
 
-Scene_Map::Scene_Map(Scene_Manager* manager) : Scene(manager) {
+Scene_Map::Scene_Map(Scene_Manager* manager) 
+: Object_Scene(manager), Scene(manager) {
 
   _tex_bg = _screen->load_Texture("res/map.jpg");
   _tex_square = _screen->load_Texture("res/square.png");
