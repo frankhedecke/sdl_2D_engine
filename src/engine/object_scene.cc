@@ -3,9 +3,7 @@
 Object_Scene::Object_Scene(Scene_Manager* manager)
 : Scene(manager) {}
 
-Object_Scene::~Object_Scene() {
-  // TODO delete all textures from items in list
-}
+Object_Scene::~Object_Scene() {}
 
 void Object_Scene::tick(bool &quit) {
 

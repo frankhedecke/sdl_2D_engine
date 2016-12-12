@@ -2,7 +2,6 @@
 #include <SDL.h>
 // TODO make this struct solely pixel based
 
-
 class Draw_Object {
 
   public:
@@ -12,6 +11,8 @@ class Draw_Object {
     float _dim_y;
     SDL_Texture* _tex;
 
-    virtual void left_click();
+    Draw_Object();
+    ~Draw_Object();
+    virtual void left_click() = 0;
     bool covers(float x, float y);
 };

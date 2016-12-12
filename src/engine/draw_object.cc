@@ -8,3 +8,6 @@ bool Draw_Object:: covers(float x, float y) {
 
   return false;
 };
+
+Draw_Object::Draw_Object(){}
+Draw_Object::~Draw_Object(){}
