@@ -2,20 +2,26 @@
 #include <forward_list>
 #include <SDL.h>
 
-#include <animation.h>
+#include <draw_object.h>
 #include <object_scene.h>
 #include <scene_manager.h>
 
 class Node {
+
+  class Node_Draw_Object : public Draw_Object {
+    void left_click();
+  };
 
   public:
     uint16_t _pos_x;
     uint16_t _pos_y;
     float _fill;
     float _diff_value;
+    Node_Draw_Object _obj;
 
-    Node(uint16_t x, uint16_t y);
+    Node(uint16_t x, uint16_t y, SDL_Texture* tex);
     void update();
+    void clicked();
 };
 
 class Link {

@@ -5,7 +5,18 @@
 #include "scene_map.h"
 #include <SDL.h>
 
-Node::Node(uint16_t x, uint16_t y) : _pos_x(x), _pos_y(y) {
+void Node::Node_Draw_Object::left_click() {
+
+  std::cout << "node at float-pos " << _x << " / " << _y << " is clicked." << std::endl;
+}
+
+Node::Node(uint16_t x, uint16_t y, SDL_Texture* tex) : _pos_x(x), _pos_y(y) {
+
+  _obj._x = 0.1 + 0.05 * _pos_x;
+  _obj._y = 0.1 + 0.05 * _pos_y;
+  _obj._dim_x = 0.02;
+  _obj._dim_y = 0.02;
+  _obj._tex = tex;
 
   _fill = 0;
   _diff_value = 0;
@@ -65,9 +76,10 @@ void Scene_Map::process() {
   
     _mod_ticks = 0;
     std::cout << "tick " << SDL_GetTicks() << std::endl;
-    std::cout << "mouse at " << _mouse_x << "." << _mouse_y << std::endl;
-    if (_click_left)
-      std::cout << "mouse clicked left " << std::endl;
+    // std::cout << "mouse at " << _mouse_x << "." << _mouse_y << std::endl;
+    if (_click_left) {
+      left_click(1.0 * _mouse_x / 1024, 1.0 * _mouse_y / 1024);
+    }
     if (_click_right)
       std::cout << "mouse clicked right " << std::endl;
 
@@ -90,10 +102,12 @@ void Scene_Map::process() {
 
   // render base
 
+/*
   // render nodes
   for (Node* node : _nodes) {
     _screen->render_Texture(0.1 + 0.05 * node->_pos_x, 0.1 + 0.05 * node->_pos_y, 0.02, 0.02, _tex_square);
   }
+*/
 
   // render points
   /*
@@ -166,9 +180,13 @@ Scene_Map::Scene_Map(Scene_Manager* manager)
   bool _click_right = false;
 
   // create nodes
-  Node* n1 = new Node(3,3);
-  Node* n2 = new Node(4,4);
-  Node* n3 = new Node(5,5);
+  Node* n1 = new Node(1, 3, _tex_square);
+  Node* n2 = new Node(4, 4, _tex_square);
+  Node* n3 = new Node(5, 5, _tex_square);
+
+  add_object(& n1->_obj);
+  add_object(& n2->_obj);
+  add_object(& n3->_obj);
 
   n1->_fill = 100;
   n2->_fill = 0;
