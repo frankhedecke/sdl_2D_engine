@@ -14,5 +14,6 @@ class Draw_Object {
     Draw_Object();
     ~Draw_Object();
     virtual void left_click() = 0;
+    virtual void mouse_over() = 0;
     bool covers(float x, float y);
 };
