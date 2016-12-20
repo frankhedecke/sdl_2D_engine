@@ -10,6 +10,11 @@ void Node::Node_Draw_Object::left_click() {
   std::cout << "node at float-pos " << _x << " / " << _y << " is clicked." << std::endl;
 }
 
+void Node::Node_Draw_Object::mouse_over() {
+
+  std::cout << "node at float-pos " << _x << " / " << _y << " is hovered." << std::endl;
+}
+
 Node::Node(uint16_t x, uint16_t y, SDL_Texture* tex) : _pos_x(x), _pos_y(y) {
 
   _obj._x = 0.1 + 0.05 * _pos_x;
@@ -77,6 +82,7 @@ void Scene_Map::process() {
     _mod_ticks = 0;
     std::cout << "tick " << SDL_GetTicks() << std::endl;
     // std::cout << "mouse at " << _mouse_x << "." << _mouse_y << std::endl;
+    mouse_over(1.0 * _mouse_x / 1024, 1.0 * _mouse_y / 1024);
     if (_click_left) {
       left_click(1.0 * _mouse_x / 1024, 1.0 * _mouse_y / 1024);
     }

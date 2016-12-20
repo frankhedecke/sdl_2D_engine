@@ -10,6 +10,7 @@ class Node {
 
   class Node_Draw_Object : public Draw_Object {
     void left_click();
+    void mouse_over();
   };
 
   public:
