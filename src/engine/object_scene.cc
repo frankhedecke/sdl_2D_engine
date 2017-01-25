@@ -9,13 +9,18 @@ void Object_Scene::tick(bool &quit) {
 
   pre_tick(quit);
 
+  _screen->clear();
+
+  pre_draw();
+
   for (Draw_Object* obj : _draw_objects) {
     _screen->render_Texture(obj->_x, obj->_y, obj->_dim_x, obj->_dim_y, obj->_tex);
   }
 
-  post_tick(quit);
+  post_draw();
 
-
+  _screen->present();
+  SDL_Delay(50);
 }
 
 #include <SDL.h>
@@ -31,6 +36,16 @@ void Object_Scene::left_click(float x, float y) {
   for (Draw_Object* obj : _draw_objects) {
     if (obj->covers(x, y)) {
       obj->left_click();
+      return;
+    }
+  }
+}
+
+void Object_Scene::right_click(float x, float y) {
+
+  for (Draw_Object* obj : _draw_objects) {
+    if (obj->covers(x, y)) {
+      obj->right_click();
       return;
     }
   }

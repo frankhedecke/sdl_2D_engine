@@ -18,10 +18,13 @@ class Object_Scene : public virtual Scene {
   public:
     Object_Scene(Scene_Manager* manager);
     ~Object_Scene();
-    virtual void pre_tick(bool &quit) = 0;
     void tick(bool &quit);
-    virtual void post_tick(bool &quit) = 0;
+    // TODO rename pre_tick()
+    virtual void pre_tick(bool &quit) = 0;
+    virtual void pre_draw() = 0;
+    virtual void post_draw() = 0;
     void add_object(Draw_Object* object);
     void left_click(float x, float y);
+    void right_click(float x, float y);
     void mouse_over(float x, float y);
 };

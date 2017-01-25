@@ -42,6 +42,9 @@ class vector_screen {
     void present();
     void clear();
     SDL_Renderer* get_renderer();
+    uint get_cur_base_res();
+    uint get_cur_offset_x();
+    uint get_cur_offset_y();
     // TODO
     // rename methods with _
     // rename into Vector_screen

@@ -142,8 +142,33 @@ void vector_screen::clear() {
   SDL_RenderClear(_renderer);
 }
 
-
 SDL_Renderer* vector_screen::get_renderer() {
   // TODO remove this method
   return _renderer;
+}
+
+uint vector_screen::get_cur_base_res() {
+
+  if(_is_fullscreen)
+    return _fs_res;
+  else
+    return _res;
+}
+
+uint vector_screen::get_cur_offset_x() {
+
+  if (_is_fullscreen) {
+    return _fs_offset_x;
+  } else {
+    return _offset_x;
+  }
+}
+
+uint vector_screen::get_cur_offset_y() {
+
+  if (_is_fullscreen) {
+    return _fs_offset_y;
+  } else {
+    return _offset_y;
+  }
 }
