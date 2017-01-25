@@ -7,7 +7,12 @@
 
 void Node::Node_Draw_Object::left_click() {
 
-  std::cout << "node at float-pos " << _x << " / " << _y << " is clicked." << std::endl;
+  std::cout << "node at float-pos " << _x << " / " << _y << " is left clicked." << std::endl;
+}
+
+void Node::Node_Draw_Object::right_click() {
+
+  std::cout << "node at float-pos " << _x << " / " << _y << " is right clicked." << std::endl;
 }
 
 void Node::Node_Draw_Object::mouse_over() {
@@ -81,13 +86,24 @@ void Scene_Map::process() {
   
     _mod_ticks = 0;
     std::cout << "tick " << SDL_GetTicks() << std::endl;
-    // std::cout << "mouse at " << _mouse_x << "." << _mouse_y << std::endl;
-    mouse_over(1.0 * _mouse_x / 1024, 1.0 * _mouse_y / 1024);
+    std::cout << "mouse at " << _mouse_x << "." << _mouse_y << std::endl;
+    // TODO subtract the borders
+    uint res = _screen->get_cur_base_res();
+    uint offset_x = _screen->get_cur_offset_x();
+    uint offset_y = _screen->get_cur_offset_y();
+    //std::cout << "res " << res << std::endl;
+    float mouse_x = 1.0 * (_mouse_x - offset_x)/ res;
+    float mouse_y = 1.0 * (_mouse_y - offset_y)/ res;
+    std::cout << "mouse at " << mouse_x << "|" << mouse_y << std::endl;
+    std::cout << "offsets " << offset_x << "|" << offset_y << std::endl;
+    mouse_over(mouse_x, mouse_y);
+
     if (_click_left) {
-      left_click(1.0 * _mouse_x / 1024, 1.0 * _mouse_y / 1024);
+      left_click(mouse_x, mouse_y);
     }
-    if (_click_right)
-      std::cout << "mouse clicked right " << std::endl;
+    if (_click_right) {
+      right_click(mouse_x, mouse_y);
+    }
 
     // update all links
     for (Link* link : _links) link->update();
@@ -96,39 +112,9 @@ void Scene_Map::process() {
     for (Node* node : _nodes) node->update();
 
     // print nodes
-    for (Node* node : _nodes)
-      std::cout << "node at " << node << " and at pos " << node->_pos_x << "." << node->_pos_y << " has " << node->_fill << " units" << std::endl;
+    //for (Node* node : _nodes)
+    //  std::cout << "node at " << node << " and at pos " << node->_pos_x << "." << node->_pos_y << " has " << node->_fill << " units" << std::endl;
   }
-
-  // clear screen
-  _screen->clear();
-
-  // render background
-  _screen->render_Texture(0, 0, 1.0, 0.75, _tex_bg);
-
-  // render base
-
-/*
-  // render nodes
-  for (Node* node : _nodes) {
-    _screen->render_Texture(0.1 + 0.05 * node->_pos_x, 0.1 + 0.05 * node->_pos_y, 0.02, 0.02, _tex_square);
-  }
-*/
-
-  // render points
-  /*
-  for (int x = 0; x <= 16; ++x)
-    for (int y = 0; y <= 11; ++y) {
-      
-      _screen->render_Texture(0.1 + 0.05 * x, 0.1 + 0.05 * y, 0.02, 0.02, _tex_square);
-    }
-  */
-}
-
-void Scene_Map::output() {
-
-  _screen->present();
-  SDL_Delay(50);
 }
 
 void Scene_Map::pre_tick(bool &quit) {
@@ -164,11 +150,12 @@ void Scene_Map::pre_tick(bool &quit) {
   process();
 }
 
-void Scene_Map::post_tick(bool &quit) {
-
-  // TODO move to Object_Scene
-  output();
+void Scene_Map::pre_draw() {
+  // TODO move render background to non click list
+  _screen->render_Texture(0, 0, 1.0, 0.75, _tex_bg);
 }
+
+void Scene_Map::post_draw() {}
 
 Scene_Map::Scene_Map(Scene_Manager* manager) 
 : Object_Scene(manager), Scene(manager) {
@@ -179,7 +166,7 @@ Scene_Map::Scene_Map(Scene_Manager* manager)
   _mod_ticks = 0;
   for (int i = 0; i < 5; ++i)
     _keys[i] = false;
-  // TODO move to class Scene
+  // TODO move to class Scene or mouse Scene or Object scene
   int _mouse_x = -1;
   int _mouse_y = -1;
   bool _click_left = false;

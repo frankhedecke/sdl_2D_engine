@@ -10,6 +10,7 @@ class Node {
 
   class Node_Draw_Object : public Draw_Object {
     void left_click();
+    void right_click();
     void mouse_over();
   };
 
@@ -57,11 +58,11 @@ class Scene_Map : public Object_Scene {
 
     void input(SDL_Event* event);
     void process();
-    void output();
 
   public:
     Scene_Map(Scene_Manager* manager);
     ~Scene_Map();
     void pre_tick(bool &quit);
-    void post_tick(bool &quit);
+    void pre_draw();
+    void post_draw();
 };
