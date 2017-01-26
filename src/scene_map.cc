@@ -7,30 +7,46 @@
 
 void Node::Node_Draw_Object::left_click() {
 
-  std::cout << "node at float-pos " << _x << " / " << _y << " is left clicked." << std::endl;
+  // std::cout << "node at float-pos " << _x << " / " << _y << " is left clicked." << std::endl;
+  if (_node != nullptr)
+    _node->toggle_tex();
 }
 
 void Node::Node_Draw_Object::right_click() {
 
-  std::cout << "node at float-pos " << _x << " / " << _y << " is right clicked." << std::endl;
+  // std::cout << "node at float-pos " << _x << " / " << _y << " is right clicked." << std::endl;
 }
 
 void Node::Node_Draw_Object::mouse_over() {
 
-  std::cout << "node at float-pos " << _x << " / " << _y << " is hovered." << std::endl;
+  // std::cout << "node at float-pos " << _x << " / " << _y << " is hovered." << std::endl;
 }
 
-Node::Node(uint16_t x, uint16_t y, SDL_Texture* tex) : _pos_x(x), _pos_y(y) {
+Node::Node(uint16_t x, uint16_t y, SDL_Texture* tex, SDL_Texture* tex_alt) : _pos_x(x), _pos_y(y), _tex(tex), _tex_alt(tex_alt) {
 
   _obj._x = 0.1 + 0.05 * _pos_x;
   _obj._y = 0.1 + 0.05 * _pos_y;
   _obj._dim_x = 0.02;
   _obj._dim_y = 0.02;
-  _obj._tex = tex;
+  _obj._node = this;
+  _obj._tex = _tex;
 
+  _cur_tex = 0;
   _fill = 0;
   _diff_value = 0;
 }
+
+void Node::toggle_tex() {
+
+  if (_cur_tex == 0) {
+    _cur_tex = 1;
+    _obj._tex = _tex_alt;
+  } else {
+    _cur_tex = 0;
+    _obj._tex = _tex;
+  }
+
+};
 
 void Node::update() {
 
@@ -70,11 +86,22 @@ void Scene_Map::input(SDL_Event* event) {
     }
   }
 
-  // TODO move to class Scene
-  // get mouse position
+  // TODO move mouse to class Scene
+
+  // update mouse positions
   uint32_t clicked = SDL_GetMouseState(&_mouse_x, &_mouse_y);
-  _click_left  = SDL_BUTTON(SDL_BUTTON_LEFT)  & clicked;
-  _click_right = SDL_BUTTON(SDL_BUTTON_RIGHT) & clicked;
+
+
+  // get mouse position
+  if (event->type == SDL_MOUSEBUTTONDOWN) {
+
+    if ((SDL_BUTTON(SDL_BUTTON_LEFT) & clicked))
+      _click_left = true;
+
+    if ((SDL_BUTTON(SDL_BUTTON_RIGHT) & clicked))
+      _click_right = true;
+
+  }
 }
 
 void Scene_Map::process() {
@@ -86,7 +113,7 @@ void Scene_Map::process() {
   
     _mod_ticks = 0;
     std::cout << "tick " << SDL_GetTicks() << std::endl;
-    std::cout << "mouse at " << _mouse_x << "." << _mouse_y << std::endl;
+    std::cout << "mouse at pixels " << _mouse_x << "|" << _mouse_y << std::endl;
     // TODO subtract the borders
     uint res = _screen->get_cur_base_res();
     uint offset_x = _screen->get_cur_offset_x();
@@ -120,6 +147,10 @@ void Scene_Map::process() {
 void Scene_Map::pre_tick(bool &quit) {
 
   SDL_Event e;
+
+  // reset clicks
+  _click_left  = false;
+  _click_right = false;
   
   // loop will be entered if an event occurrs
   while (SDL_PollEvent(&e)) {
@@ -162,6 +193,7 @@ Scene_Map::Scene_Map(Scene_Manager* manager)
 
   _tex_bg = _screen->load_Texture("res/map.jpg");
   _tex_square = _screen->load_Texture("res/square.png");
+  _tex_square2 = _screen->load_Texture("res/square_green.png");
   _startup_ticks = SDL_GetTicks();
   _mod_ticks = 0;
   for (int i = 0; i < 5; ++i)
@@ -173,9 +205,9 @@ Scene_Map::Scene_Map(Scene_Manager* manager)
   bool _click_right = false;
 
   // create nodes
-  Node* n1 = new Node(1, 3, _tex_square);
-  Node* n2 = new Node(4, 4, _tex_square);
-  Node* n3 = new Node(5, 5, _tex_square);
+  Node* n1 = new Node(1, 3, _tex_square, _tex_square2);
+  Node* n2 = new Node(4, 4, _tex_square, _tex_square2);
+  Node* n3 = new Node(5, 5, _tex_square, _tex_square2);
 
   add_object(& n1->_obj);
   add_object(& n2->_obj);
@@ -197,4 +229,7 @@ Scene_Map::Scene_Map(Scene_Manager* manager)
   _links.push_front(l2_3);
 }
 
-Scene_Map::~Scene_Map() {}
+Scene_Map::~Scene_Map() {
+
+  // TODO free textures
+}

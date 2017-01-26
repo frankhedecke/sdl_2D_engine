@@ -24,6 +24,7 @@ class Object_Scene : public virtual Scene {
     virtual void pre_draw() = 0;
     virtual void post_draw() = 0;
     void add_object(Draw_Object* object);
+    // TODO differentiate pressed_left | clicked_left | double_clicked_left + _right
     void left_click(float x, float y);
     void right_click(float x, float y);
     void mouse_over(float x, float y);

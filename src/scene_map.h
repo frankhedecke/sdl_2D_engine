@@ -9,21 +9,28 @@
 class Node {
 
   class Node_Draw_Object : public Draw_Object {
-    void left_click();
-    void right_click();
-    void mouse_over();
+    public:
+      Node* _node;
+
+      void left_click();
+      void right_click();
+      void mouse_over();
   };
 
   public:
     uint16_t _pos_x;
+    uint16_t _cur_tex;
     uint16_t _pos_y;
     float _fill;
     float _diff_value;
     Node_Draw_Object _obj;
+    SDL_Texture* _tex;
+    SDL_Texture* _tex_alt;
 
-    Node(uint16_t x, uint16_t y, SDL_Texture* tex);
+    Node(uint16_t x, uint16_t y, SDL_Texture* tex, SDL_Texture* tex_alt);
     void update();
     void clicked();
+    void toggle_tex();
 };
 
 class Link {
@@ -55,6 +62,7 @@ class Scene_Map : public Object_Scene {
     // textures
     SDL_Texture* _tex_bg;
     SDL_Texture* _tex_square;
+    SDL_Texture* _tex_square2;
 
     void input(SDL_Event* event);
     void process();
