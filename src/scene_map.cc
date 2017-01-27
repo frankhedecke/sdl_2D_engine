@@ -19,10 +19,13 @@ void Node::Node_Draw_Object::right_click() {
 
 void Node::Node_Draw_Object::mouse_over() {
 
+  if (_node != nullptr)
+    _node->hi_tex();
+
   // std::cout << "node at float-pos " << _x << " / " << _y << " is hovered." << std::endl;
 }
 
-Node::Node(uint16_t x, uint16_t y, SDL_Texture* tex, SDL_Texture* tex_alt) : _pos_x(x), _pos_y(y), _tex(tex), _tex_alt(tex_alt) {
+Node::Node(uint16_t x, uint16_t y, SDL_Texture* tex, SDL_Texture* tex_hi, SDL_Texture* tex_alt) : _pos_x(x), _pos_y(y), _tex(tex), _tex_hi(tex_hi), _tex_alt(tex_alt) {
 
   _obj._x = 0.1 + 0.05 * _pos_x;
   _obj._y = 0.1 + 0.05 * _pos_y;
@@ -45,7 +48,13 @@ void Node::toggle_tex() {
     _cur_tex = 0;
     _obj._tex = _tex;
   }
+};
 
+void Node::hi_tex() {
+
+  if (_cur_tex == 0) {
+    _obj._tex = _tex_hi;
+  }
 };
 
 void Node::update() {
@@ -193,6 +202,7 @@ Scene_Map::Scene_Map(Scene_Manager* manager)
 
   _tex_bg = _screen->load_Texture("res/map.jpg");
   _tex_square = _screen->load_Texture("res/square.png");
+  _tex_square_hi = _screen->load_Texture("res/square_hi.png");
   _tex_square2 = _screen->load_Texture("res/square_green.png");
   _startup_ticks = SDL_GetTicks();
   _mod_ticks = 0;
@@ -205,9 +215,9 @@ Scene_Map::Scene_Map(Scene_Manager* manager)
   bool _click_right = false;
 
   // create nodes
-  Node* n1 = new Node(1, 3, _tex_square, _tex_square2);
-  Node* n2 = new Node(4, 4, _tex_square, _tex_square2);
-  Node* n3 = new Node(5, 5, _tex_square, _tex_square2);
+  Node* n1 = new Node(1, 3, _tex_square, _tex_square_hi, _tex_square2);
+  Node* n2 = new Node(4, 4, _tex_square, _tex_square_hi, _tex_square2);
+  Node* n3 = new Node(5, 5, _tex_square, _tex_square_hi, _tex_square2);
 
   add_object(& n1->_obj);
   add_object(& n2->_obj);
