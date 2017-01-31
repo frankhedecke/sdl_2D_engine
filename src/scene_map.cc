@@ -78,38 +78,30 @@ void Link::update() {
 
 void Scene_Map::input(SDL_Event* event) {
 
+  // std::cout << "Scene_Map::input()" << std::endl;
+
   if (event->type == SDL_KEYDOWN) {
     switch(event->key.keysym.sym) {
-      case SDLK_w:    _keys[0] = true; break;
-      case SDLK_s:    _keys[1] = true; break;
-      case SDLK_a:    _keys[2] = true; break;
-      case SDLK_d:    _keys[3] = true; break;
+      case SDLK_w: _keys[0] = true; break;
+      case SDLK_s: _keys[1] = true; break;
+      case SDLK_a: _keys[2] = true; break;
+      case SDLK_d: _keys[3] = true; break;
+      case SDLK_f: _keys[4] = true; break; // TODO use _fullscreen_key in object scene
     }
   } else if (event->type == SDL_KEYUP) {
     // TODO check if buttons are pressed or already are released
     switch(event->key.keysym.sym) {
-      case SDLK_w:    _keys[0] = false; break;
-      case SDLK_s:    _keys[1] = false; break;
-      case SDLK_a:    _keys[2] = false; break;
-      case SDLK_d:    _keys[3] = false; break;
+      case SDLK_w: _keys[0] = false; break;
+      case SDLK_s: _keys[1] = false; break;
+      case SDLK_a: _keys[2] = false; break;
+      case SDLK_d: _keys[3] = false; break;
+      case SDLK_f:
+             if (_keys[4]) {
+                _keys[4] = false;
+                _screen->toggle_fullscreen();
+             }
+             break;
     }
-  }
-
-  // TODO move mouse to class Scene
-
-  // update mouse positions
-  uint32_t clicked = SDL_GetMouseState(&_mouse_x, &_mouse_y);
-
-
-  // get mouse position
-  if (event->type == SDL_MOUSEBUTTONDOWN) {
-
-    if ((SDL_BUTTON(SDL_BUTTON_LEFT) & clicked))
-      _click_left = true;
-
-    if ((SDL_BUTTON(SDL_BUTTON_RIGHT) & clicked))
-      _click_right = true;
-
   }
 }
 
@@ -122,24 +114,7 @@ void Scene_Map::process() {
   
     _mod_ticks = 0;
     std::cout << "tick " << SDL_GetTicks() << std::endl;
-    std::cout << "mouse at pixels " << _mouse_x << "|" << _mouse_y << std::endl;
-    // TODO subtract the borders
-    uint res = _screen->get_cur_base_res();
-    uint offset_x = _screen->get_cur_offset_x();
-    uint offset_y = _screen->get_cur_offset_y();
-    //std::cout << "res " << res << std::endl;
-    float mouse_x = 1.0 * (_mouse_x - offset_x)/ res;
-    float mouse_y = 1.0 * (_mouse_y - offset_y)/ res;
-    std::cout << "mouse at " << mouse_x << "|" << mouse_y << std::endl;
-    std::cout << "offsets " << offset_x << "|" << offset_y << std::endl;
-    mouse_over(mouse_x, mouse_y);
-
-    if (_click_left) {
-      left_click(mouse_x, mouse_y);
-    }
-    if (_click_right) {
-      right_click(mouse_x, mouse_y);
-    }
+    std::cout << "mouse at pixels " << _mouse_pos_x << "|" << _mouse_pos_y << std::endl;
 
     // update all links
     for (Link* link : _links) link->update();
@@ -154,38 +129,6 @@ void Scene_Map::process() {
 }
 
 void Scene_Map::pre_tick(bool &quit) {
-
-  SDL_Event e;
-
-  // reset clicks
-  _click_left  = false;
-  _click_right = false;
-  
-  // loop will be entered if an event occurrs
-  while (SDL_PollEvent(&e)) {
-    if (e.type == SDL_QUIT) {
-      quit = true;
-    } else if (e.type == SDL_KEYDOWN) {
-      switch(e.key.keysym.sym) {
-        case SDLK_ESCAPE:
-             quit = true; break;
-        case SDLK_f:
-             _keys[4] = true; break;
-      }
-    } else if (e.type == SDL_KEYUP) {
-      if (e.key.keysym.sym == SDLK_f && _keys[4]) {
-         _keys[4] = false;
-         _screen->toggle_fullscreen(); 
-      }
-
-    } else if (e.type == SDL_WINDOWEVENT) {
-       if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-         _screen->update_res();
-       }
-    }
-
-    input(&e);
-  }
 
   process();
 }
@@ -208,11 +151,6 @@ Scene_Map::Scene_Map(Scene_Manager* manager)
   _mod_ticks = 0;
   for (int i = 0; i < 5; ++i)
     _keys[i] = false;
-  // TODO move to class Scene or mouse Scene or Object scene
-  int _mouse_x = -1;
-  int _mouse_y = -1;
-  bool _click_left = false;
-  bool _click_right = false;
 
   // create nodes
   Node* n1 = new Node(1, 3, _tex_square, _tex_square_hi, _tex_square2);
